@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Solver">
+      <UniqueIdentifier>{ee4b1cb3-863d-4f7e-aafc-096a42c53cf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{5ffe7fa5-648b-4893-b3bf-ad97eac05dd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Arguments">
+      <UniqueIdentifier>{69e27674-91b3-49f5-956c-381cb40dd0cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DataStructures">
+      <UniqueIdentifier>{13ca2605-17d5-4fb0-99f6-b52c4a43777e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Parser">
+      <UniqueIdentifier>{51df263f-27d5-453a-b3aa-094659ee74d1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="WaterCalc.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Solver.cpp">
+      <Filter>Solver</Filter>
+    </ClCompile>
+    <ClCompile Include="Arguments.cpp">
+      <Filter>Arguments</Filter>
+    </ClCompile>
+    <ClCompile Include="Graph.cpp">
+      <Filter>DataStructures</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser.cpp">
+      <Filter>Parser</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Solver.h">
+      <Filter>Solver</Filter>
+    </ClInclude>
+    <ClInclude Include="Arguments.h">
+      <Filter>Arguments</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph.h">
+      <Filter>DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser.h">
+      <Filter>Parser</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

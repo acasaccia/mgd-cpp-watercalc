@@ -15,6 +15,7 @@ namespace Solver {
 		}
 	};
 
+	// @todo: turn into a function
 	class CompareHeightAndCapacity {
 		public:
 		bool operator()(Vertex* v1, Vertex* v2)
@@ -23,6 +24,7 @@ namespace Solver {
 		}
 	};
 
+	// @todo: turn into a function
 	class EqualsHeightAndCapacity {
 		public:
 		bool operator()(Vertex* v1, Vertex* v2)
@@ -36,16 +38,12 @@ namespace Solver {
 		vertexList* vertexesQueue = new vertexList(iGraph.mVertexes.begin(), iGraph.mVertexes.end());
 
 		while (!vertexesQueue->empty()) {
-
 			vertexesQueue->sort(CompareStability());
 			Vertex* current = vertexesQueue->front();
-
 			if (!current->stable) {
 				break;
 			}
-
 			vertexesQueue->pop_front();
-
 			for ( vertexListIterator neighbourIt = current->neighbours.begin(); neighbourIt != current->neighbours.end(); ++neighbourIt) {
 				if ( current->height <= (*neighbourIt)->height ) {
 					(*neighbourIt)->capacity = 0;
@@ -86,6 +84,7 @@ namespace Solver {
 		delete walls;
 	}
 
+	// @todo: can I avoid recursion?
 	void walkNeighboursAndAddToPlateau(Vertex* iVertex, vertexSet* ioPlateau) {
 		ioPlateau->insert(iVertex);
 		for ( vertexListIterator neighbourIt = iVertex->neighbours.begin(); neighbourIt != iVertex->neighbours.end(); ++neighbourIt) {
@@ -97,11 +96,13 @@ namespace Solver {
 		}
 	}
 
+	// @todo: can I avoid recursion?
 	void walkPlateauAndGetWalls(vertexSet* iPlateau, vertexSet* ioWall) {
 		for ( vertexSetIterator plateauIt = iPlateau->begin(); plateauIt != iPlateau->end(); ++plateauIt) {
 			for ( vertexListIterator neighbourIt = (*plateauIt)->neighbours.begin(); neighbourIt != (*plateauIt)->neighbours.end(); ++neighbourIt) {
 				if (ioWall->find(*neighbourIt) == ioWall->end()) {
-					if (CompareHeightAndCapacity()(*plateauIt, *neighbourIt) || ((*neighbourIt)->stable && !(*neighbourIt)->isSink)) {
+					// it should never happen, plateaus are always surrounded by already stable higher walls, I can't just have sink as a wall
+					if (CompareHeightAndCapacity()(*plateauIt, *neighbourIt) || ((*neighbourIt)->stable /* && !(*neighbourIt)->isSink */ )) {
 						ioWall->insert(*neighbourIt);
 					}
 				}
@@ -114,8 +115,15 @@ namespace Solver {
 		for ( vertexSetIterator wallIt = iWall->begin(); wallIt != iWall->end(); ++wallIt) {
 			if ( shortestWall == NULL )
 				shortestWall = *wallIt;
-			else if (CompareHeightAndCapacity()(*wallIt, shortestWall))
+			else if (CompareHeightAndCapacity()(*wallIt, shortestWall)) {
 				shortestWall = *wallIt;
+			}
+			// When there are more than one shortestWall candidates it would be better to pick the already stable one
+			// however this seems to slow down the algorithm, we are adding an if each iteration to speed up an unusual case
+			//else if (EqualsHeightAndCapacity()(*wallIt, shortestWall)) {
+			//	if (!shortestWall->stable && (*wallIt)->stable)
+			//		shortestWall = *wallIt;
+			//}
 		}
 		return shortestWall;
 	}

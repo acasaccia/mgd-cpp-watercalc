@@ -12,7 +12,7 @@ Usage and input design:
 usage: C:\>WaterCalc.exe [inputfile] [-adjacency=4|8]
 -adjacency parameter is optional default is 4-way adjacency.
 
-4 way adjacency water flow:
+With 4 way adjacency each cell communicates with neighbours like this:
  
    | X |   
 -----------
@@ -20,7 +20,7 @@ usage: C:\>WaterCalc.exe [inputfile] [-adjacency=4|8]
 -----------
    | X |
 
-8 way adjacency water flow:
+while in 8 way adjacency:
 
  X | X | X 
 -----------
@@ -31,7 +31,7 @@ usage: C:\>WaterCalc.exe [inputfile] [-adjacency=4|8]
 
 As a design choice I slightly changed input file format adding the number of
 rows and columns on top, so that I don't have to check for endlines while
-parsing and error detecting is way easier.
+parsing and error detecting is much easier.
 
 expected input file format:
 rows columns

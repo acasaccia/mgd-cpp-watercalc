@@ -23,16 +23,19 @@ struct Vertex {
 	uint capacity;
 	std::forward_list<Vertex*> neighbours;
 	bool stable;
+	bool isSink;
 
 	Vertex() :
 		height( 0 ),
 		capacity( 0 ),
-		stable( true )
+		stable( true ),
+		isSink( true )
 	{ neighbours = std::forward_list<Vertex*>(); }
 
 	Vertex(uint iHeight) :
 		height( iHeight ),
 		capacity( 0 ),
-		stable( false )
+		stable( false ),
+		isSink( false )
 	{ neighbours = std::forward_list<Vertex*>(); }
 };

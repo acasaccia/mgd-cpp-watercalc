@@ -102,7 +102,8 @@ namespace Solver {
 		for ( vertexSetIterator plateauIt = iPlateau->begin(); plateauIt != iPlateau->end(); ++plateauIt) {
 			for ( vertexListIterator neighbourIt = (*plateauIt)->neighbours.begin(); neighbourIt != (*plateauIt)->neighbours.end(); ++neighbourIt) {
 				if (ioWall->find(*neighbourIt) == ioWall->end()) {
-					if (LessHeightAndCapacity()(*plateauIt, *neighbourIt) || ((*neighbourIt)->stable)) {
+					// The isSink flag is used to avoid treating the sink as a normal cell when finding the wall of the cluster
+					if (LessHeightAndCapacity()(*plateauIt, *neighbourIt) || ((*neighbourIt)->stable && !(*neighbourIt)->isSink )) {
 						ioWall->insert(*neighbourIt);
 					}
 				}

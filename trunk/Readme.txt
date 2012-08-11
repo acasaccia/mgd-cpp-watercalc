@@ -49,6 +49,12 @@ File is parsed into a vector of vertexes, the attributes of each are:
 											adjacency mode chosen
 * bool stable;		flag initialized to false, becomes true when the capacity
 					value of Vertex is the final one
+* bool isSink;		I modeled the outside of the container as a special node,
+					with 0 capacity and	0 height.
+					All border vertexes in the container are connected to it.
+					I will refer to it as the "sink". This flag is used to
+					avoid treating the sink as a normal cell when finding the
+					border of a cluster later in the algorithm.
 
 Having typedef-ed uint as unsigned int, I can treat at most UINT_MAX high cells.
 
@@ -61,9 +67,6 @@ I can treat at most containers with UINT_MAX rows and columns.
 After object creation buildAdjacencyList() has to be called, to explicit
 neighbouring informations and create on each Vertex the lists of pointers to
 neighbour vertexes.
-I modeled the outside of the container as a special node, with 0 capacity and
-0 height. All border vertexes in the container are connected to it.
-I will refer to it as the "sink".
 Graph additionally contains some methods to display its status to std::cout.
 
 ===============================================================================

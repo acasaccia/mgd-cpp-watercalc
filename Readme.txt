@@ -45,8 +45,6 @@ Vertex data structure description:
 File is parsed into a vector of vertexes, the attributes of each are:
 * uint height;		parsed from input file
 * uint capacity;	initialized to 0
-* std::forward_list<Vertex*> neighbours;	pointers to neighbours according to
-											adjacency mode chosen
 * bool stable;		flag initialized to false, becomes true when the capacity
 					value of Vertex is the final one
 * bool isSink;		I modeled the outside of the container as a special node,
@@ -55,7 +53,8 @@ File is parsed into a vector of vertexes, the attributes of each are:
 					I will refer to it as the "sink". This flag is used to
 					avoid treating the sink as a normal cell when finding the
 					border of a cluster later in the algorithm.
-
+* std::forward_list<Vertex*> neighbours;	pointers to neighbours according to
+											adjacency mode chosen
 Having typedef-ed uint as unsigned int, I can treat at most UINT_MAX high cells.
 
 ===============================================================================

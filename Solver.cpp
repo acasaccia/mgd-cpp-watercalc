@@ -38,6 +38,11 @@ namespace Solver {
 
 		vertexList* vertexesQueue = new vertexList(iGraph.mVertexes.begin(), iGraph.mVertexes.end());
 
+		// After parsing the only node for which we have stable status is the sink. We
+		// iterate from it, climbing up the borders of the container and moving through
+		// the higher vertexes we find. For each of these vertexes we can state they have
+		// 0 capacity and stable status as their content directly goes into the sink.
+		// This way we easily restrict search space for the second part of the algorithm.
 		while (!vertexesQueue->empty()) {
 			vertexesQueue->sort(StableFirst());
 			Vertex* current = vertexesQueue->front();
@@ -85,6 +90,8 @@ namespace Solver {
 		delete walls;
 	}
 
+	// Recursively find the cluster of neighbours with the same height and capacity as
+	// current vertex if they exists (I refer to these vertexes as "plateau").
 	// @todo: can I avoid recursion?
 	void walkNeighboursAndAddToPlateau(Vertex* iVertex, vertexSet* ioPlateau) {
 		ioPlateau->insert(iVertex);
@@ -97,13 +104,15 @@ namespace Solver {
 		}
 	}
 
+	// Recursively find all border neighbours for the plateau (I refer to the border
+	// neighbours as "wall").
 	// @todo: can I avoid recursion?
 	void walkPlateauAndGetWalls(vertexSet* iPlateau, vertexSet* ioWall) {
 		for ( vertexSetIterator plateauIt = iPlateau->begin(); plateauIt != iPlateau->end(); ++plateauIt) {
 			for ( vertexListIterator neighbourIt = (*plateauIt)->neighbours.begin(); neighbourIt != (*plateauIt)->neighbours.end(); ++neighbourIt) {
 				if (ioWall->find(*neighbourIt) == ioWall->end()) {
-					// The isSink flag is used to avoid treating the sink as a normal cell when finding the wall of the cluster
-					if (LessHeightAndCapacity()(*plateauIt, *neighbourIt) || ((*neighbourIt)->stable && !(*neighbourIt)->isSink )) {
+					// We have to avoid treating the sink as a normal cell when finding the wall of the cluster
+					if (LessHeightAndCapacity()(*plateauIt, *neighbourIt) || ((*neighbourIt)->stable && !(*neighbourIt)->sink )) {
 						ioWall->insert(*neighbourIt);
 					}
 				}
@@ -129,11 +138,15 @@ namespace Solver {
 		return shortestWall;
 	}
 
+	// The shortest vertex of the wall determines if selected plateau's capacity has to
+	// be incremented.
 	void updateCapacities(vertexSet* iPlateau, Vertex* shortestWall) {
 		for ( vertexSetIterator plateauIt = iPlateau->begin(); plateauIt != iPlateau->end(); ++plateauIt) {
 			if (shortestWall->capacity + shortestWall->height >= (*plateauIt)->height + (*plateauIt)->capacity) {
 				(*plateauIt)->capacity += shortestWall->capacity + shortestWall->height - ( (*plateauIt)->height + (*plateauIt)->capacity );
 			}
+			// If the shortest wall is stable, I can mark all plateau as stable (there is no way
+			// its capacity can further increase).
 			(*plateauIt)->stable = shortestWall->stable;
 		}
 	}

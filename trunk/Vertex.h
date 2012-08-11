@@ -1,7 +1,7 @@
 /*! 
  *  Stores information about each cell of the container.
- *  Height is the physical height of the cell,
- *  Capacity is initialized at infinite and will be calculated as the distance from the outside of the container.
+ *  Height is the physical height of the cell as parsed from input file.
+ *  Capacity is initialized to zero.
  *  Neighbours will be added after the whole file has been parsed and the geometry of the container is known.
  *  -
  *  WaterCalc Homework - Advanced cpp programming

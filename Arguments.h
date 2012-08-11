@@ -1,5 +1,5 @@
 /*! 
- *  Functions to handle command line args
+ *  Namespaced functions to handle command line args
  *  -
  *  WaterCalc Homework - Advanced cpp programming
  *  Master in Computer Game Development, Verona, Italy

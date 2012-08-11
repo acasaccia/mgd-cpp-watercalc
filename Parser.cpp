@@ -9,12 +9,7 @@
  */
 
 #include "Parser.h"
-
 #include <iostream>
-#include <fstream>
-#include <string>
-#include "Graph.h"
-#include "Vertex.h"
 
 namespace Parser {
 

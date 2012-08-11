@@ -16,26 +16,23 @@
 #include <cstddef>
 #include <forward_list>
 
-typedef std::size_t uint;
+typedef unsigned int uint;
 
 struct Vertex {
 	uint height;
 	uint capacity;
 	std::forward_list<Vertex*> neighbours;
 	bool stable;
-	bool isSink;
 
 	Vertex() :
 		height( 0 ),
 		capacity( 0 ),
-		stable( true ),
-		isSink( true )
+		stable( true )
 	{ neighbours = std::forward_list<Vertex*>(); }
 
 	Vertex(uint iHeight) :
 		height( iHeight ),
 		capacity( 0 ),
-		stable( false ),
-		isSink( false )
+		stable( false )
 	{ neighbours = std::forward_list<Vertex*>(); }
 };

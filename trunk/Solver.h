@@ -1,6 +1,5 @@
 /*! 
  *  Functions that handle the actual solving of watercalc problem.
- *  See problem description @ http://code.google.com/p/mgd-cpp-watercalc/
  *  -
  *  WaterCalc Homework - Advanced cpp programming
  *  Master in Computer Game Development, Verona, Italy
@@ -29,4 +28,5 @@ namespace Solver {
 	void walkPlateauAndGetWalls(vertexSet* iPlateau, vertexSet* ioWall);
 	Vertex* getShortestWall(vertexSet* iWall);
 	void updateCapacities(vertexSet* iPlateau, Vertex* shortestWall);
+	bool equalHeightAndCapacity(Vertex* v1, Vertex* v2);
 };

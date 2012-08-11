@@ -51,4 +51,7 @@
       <Filter>Parser</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Readme.txt" />
+  </ItemGroup>
 </Project>

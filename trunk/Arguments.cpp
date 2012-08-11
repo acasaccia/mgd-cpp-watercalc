@@ -10,8 +10,6 @@
 
 #include "Arguments.h"
 #include <iostream>
-#include <string>
-#include <vector>
 
 namespace Arguments {
 
@@ -27,7 +25,7 @@ namespace Arguments {
 	}
 
 	void displayHelp() {
-		std::cout << "usage: C:\\>WaterCalc.exe [Parser] [-adjacency=4|8] " << std::endl;
+		std::cout << "usage: C:\\>WaterCalc.exe [inputfile] [-adjacency=4|8] " << std::endl;
 		std::cout << "-adjacency parameter is optional default is 4-way adjacency." << std::endl;
 	}
 

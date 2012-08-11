@@ -1,13 +1,20 @@
-﻿
+﻿/*! 
+ *  Functions that handle the actual solving of watercalc problem.
+ *  -
+ *  WaterCalc Homework - Advanced cpp programming
+ *  Master in Computer Game Development, Verona, Italy
+ *  -
+ *  \author Andrea Casaccia
+ *  \date 14 July 2012
+ */
+
 #include "Solver.h"
-#include "Graph.h"
-#include "Vertex.h"
 #include <vector>
 #include <iostream>
 
 namespace Solver {
 
-	class CompareStability {
+	class MoreStability {
 		public:
 		bool operator()(Vertex* v1, Vertex* v2)
 		{
@@ -15,8 +22,7 @@ namespace Solver {
 		}
 	};
 
-	// @todo: turn into a function
-	class CompareHeightAndCapacity {
+	class LessHeightAndCapacity {
 		public:
 		bool operator()(Vertex* v1, Vertex* v2)
 		{
@@ -24,21 +30,16 @@ namespace Solver {
 		}
 	};
 
-	// @todo: turn into a function
-	class EqualsHeightAndCapacity {
-		public:
-		bool operator()(Vertex* v1, Vertex* v2)
-		{
-			return v1->height + v1->capacity == v2->height + v2->capacity;
-		}
-	};
+	bool equalHeightAndCapacity (Vertex* v1, Vertex* v2) {
+		return v1->height + v1->capacity == v2->height + v2->capacity;
+	}
 
 	void solve(Graph &iGraph) {
 
 		vertexList* vertexesQueue = new vertexList(iGraph.mVertexes.begin(), iGraph.mVertexes.end());
 
 		while (!vertexesQueue->empty()) {
-			vertexesQueue->sort(CompareStability());
+			vertexesQueue->sort(MoreStability());
 			Vertex* current = vertexesQueue->front();
 			if (!current->stable) {
 				break;
@@ -56,7 +57,7 @@ namespace Solver {
 		iGraph.display(CAPACITIES);
 
 		while (!vertexesQueue->empty()) {
-			vertexesQueue->sort(CompareHeightAndCapacity());
+			vertexesQueue->sort(LessHeightAndCapacity());
 			Vertex* current = vertexesQueue->front();
 			if (current->stable) {
 				vertexesQueue->pop_front();
@@ -89,7 +90,7 @@ namespace Solver {
 		ioPlateau->insert(iVertex);
 		for ( vertexListIterator neighbourIt = iVertex->neighbours.begin(); neighbourIt != iVertex->neighbours.end(); ++neighbourIt) {
 			if (ioPlateau->find(*neighbourIt) == ioPlateau->end()) {
-				if (EqualsHeightAndCapacity()(iVertex, *neighbourIt)) {
+				if (equalHeightAndCapacity(iVertex, *neighbourIt)) {
 					walkNeighboursAndAddToPlateau(*neighbourIt, ioPlateau);
 				}
 			}
@@ -101,8 +102,7 @@ namespace Solver {
 		for ( vertexSetIterator plateauIt = iPlateau->begin(); plateauIt != iPlateau->end(); ++plateauIt) {
 			for ( vertexListIterator neighbourIt = (*plateauIt)->neighbours.begin(); neighbourIt != (*plateauIt)->neighbours.end(); ++neighbourIt) {
 				if (ioWall->find(*neighbourIt) == ioWall->end()) {
-					// it should never happen, plateaus are always surrounded by already stable higher walls, I can't just have sink as a wall
-					if (CompareHeightAndCapacity()(*plateauIt, *neighbourIt) || ((*neighbourIt)->stable /* && !(*neighbourIt)->isSink */ )) {
+					if (LessHeightAndCapacity()(*plateauIt, *neighbourIt) || ((*neighbourIt)->stable)) {
 						ioWall->insert(*neighbourIt);
 					}
 				}
@@ -115,11 +115,11 @@ namespace Solver {
 		for ( vertexSetIterator wallIt = iWall->begin(); wallIt != iWall->end(); ++wallIt) {
 			if ( shortestWall == NULL )
 				shortestWall = *wallIt;
-			else if (CompareHeightAndCapacity()(*wallIt, shortestWall)) {
+			else if (LessHeightAndCapacity()(*wallIt, shortestWall)) {
 				shortestWall = *wallIt;
 			}
 			// When there are more than one shortestWall candidates it would be better to pick the already stable one
-			// however this seems to slow down the algorithm, we are adding an if each iteration to speed up an unusual case
+			// however this slows down the algorithm, we are adding an if each iteration to speed up an unusual case
 			//else if (EqualsHeightAndCapacity()(*wallIt, shortestWall)) {
 			//	if (!shortestWall->stable && (*wallIt)->stable)
 			//		shortestWall = *wallIt;

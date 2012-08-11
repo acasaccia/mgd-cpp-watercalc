@@ -11,10 +11,6 @@
  */
 
 #include "Graph.h"
-#include "Vertex.h"
-#include <cstddef>
-#include <vector>
-#include <forward_list>
 #include <iostream>
 
 Graph::Graph(uint iRows, uint iColumns, std::vector<Vertex*> iVertexes) {

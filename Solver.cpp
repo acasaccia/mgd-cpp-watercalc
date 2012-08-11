@@ -14,7 +14,7 @@
 
 namespace Solver {
 
-	class MoreStability {
+	class StableFirst {
 		public:
 		bool operator()(Vertex* v1, Vertex* v2)
 		{
@@ -39,7 +39,7 @@ namespace Solver {
 		vertexList* vertexesQueue = new vertexList(iGraph.mVertexes.begin(), iGraph.mVertexes.end());
 
 		while (!vertexesQueue->empty()) {
-			vertexesQueue->sort(MoreStability());
+			vertexesQueue->sort(StableFirst());
 			Vertex* current = vertexesQueue->front();
 			if (!current->stable) {
 				break;

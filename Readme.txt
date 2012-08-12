@@ -30,10 +30,10 @@ while in 8 way adjacency:
 
 
 As a design choice I slightly changed input file format adding the number of
-rows and columns on top, so that I don't have to check for endlines while
-parsing and error detecting is much easier.
+rows and columns on top. I can reserve the whole size of the std::vector
+beforehand and parsing and error checking is also simplified.
 
-expected input file format:
+Expected input file format:
 rows columns
 element(0,0)	...		element(0,columns)
 ...				...		...

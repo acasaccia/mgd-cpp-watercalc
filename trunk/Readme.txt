@@ -43,8 +43,8 @@ element(rows,0)	...		element(rows,columns)
 Vertex data structure description:
 
 File is parsed into a vector of vertexes, the attributes of each are:
-* uint height;		parsed from input file
-* uint capacity;	initialized to 0
+* uint_t height;	parsed from input file
+* uint_t capacity;	initialized to 0
 * bool stable;		flag initialized to false, becomes true when the capacity
 					value of Vertex is the final one
 * bool isSink;		I modeled the outside of the container as a special node,
@@ -55,14 +55,14 @@ File is parsed into a vector of vertexes, the attributes of each are:
 					border of a cluster later in the algorithm.
 * std::forward_list<Vertex*> neighbours;	pointers to neighbours according to
 											adjacency mode chosen
-Having typedef-ed uint as unsigned int, I can treat at most UINT_MAX high cells.
+Having typedef-ed uint_t as unsigned int, I can treat at most uint_t_MAX high cells.
 
 ===============================================================================
 Graph data structure description:
 
 Graph is a vector of Vertexes.
 I keep track of rows and columns to implicitly determine each vertex neighbour.
-I can treat at most containers with UINT_MAX rows and columns.
+I can treat at most containers with uint_t_MAX rows and columns.
 After object creation buildAdjacencyList() has to be called, to explicit
 neighbouring informations and create on each Vertex the lists of pointers to
 neighbour vertexes.
@@ -84,11 +84,11 @@ Container heights:
 9 8 9 7 8 2 5
 
 Preprocessing phase:
-After parsing the only node for which we have stable status is the sink. We
+After parsing the only node for which I have stable status is the sink. I
 iterate from it, climbing up the borders of the container and moving through
-the higher vertexes we find. For each of these vertexes we can state they have
+the higher vertexes I find. For each of these vertexes I can state they have
 0 capacity and stable status as their content directly goes into the sink.
-This way we easily restrict search space for the second part of the algorithm.
+This way I easily restricted search space for the second part of the algorithm.
 
 After preprocessing:
 0 0 0 0 0 0 0
@@ -100,20 +100,18 @@ After preprocessing:
 0 0 0 0 0 0 0
 
 Processing phase:
-At each step of the processing phase I sort the unstable vertexes by height +
-capacity.
-I select the lowest as current vertex.
-I recursively[1] find the cluster of neighbours with the same height and capacity as
-current vertex if they exists (I refer to these vertexes as "plateau").
-I recursively[1] find all border neighbours for the plateau (I refer to the border
-neighbours as "wall").
-The shortest vertex of the wall determines if selected plateau's capacity has to
-be incremented.
-If the shortest wall is stable, I can mark all plateau as stable (there is no way
-its capacity can further increase).
+1 Sort the unstable vertexes by height plus capacity
+2 Select the lowest as current
+3 Find the cluster of neighbours with the same height and capacity as current
+  if they exists (I refer to these vertexes as "plateau").
+4 Find the wall of the plateau (the border vertexes)
+5 Shortest vertex of the wall determines if selected plateau's capacity has to
+  be incremented.
+6 If shortest wall is stable, mark all plateau as stable (there is no way
+  its capacity can further increase).
 
-[1] I guess recursion is bad because it could overflow the stack for a huge amount of
-	cells. Having more time I would investigate a way to do it with iteration.
+I implemented the whole algorithm without recursion to avoid being
+limited by stack size for huge amounts of node.
 
 Container capacities:
 0 0 0 0 0 0 0

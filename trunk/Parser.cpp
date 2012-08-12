@@ -18,7 +18,7 @@ namespace Parser {
 		std::ifstream inputFile;
 		load(iFilename, inputFile);
 
-		uint rows = 0, columns = 0;
+		uint_t rows = 0, columns = 0;
 		parseHeader(inputFile, rows, columns);
 
 		Graph* container = parseData(inputFile, rows, columns);
@@ -35,7 +35,7 @@ namespace Parser {
 		}
 	}
 
-	void parseHeader(std::ifstream &iParser, uint &oRows, uint &oColumns) {
+	void parseHeader(std::ifstream &iParser, uint_t &oRows, uint_t &oColumns) {
 
 		iParser >> oRows;
 		if (iParser.fail()) {
@@ -58,15 +58,15 @@ namespace Parser {
 		std::cout << "Parsed header: expecting " << oRows << " rows and " << oColumns << " columns." << std::endl;
 	}
 
-	Graph* parseData(std::ifstream &iParser, const uint iRows, const uint iColumns) {
+	Graph* parseData(std::ifstream &iParser, const uint_t iRows, const uint_t iColumns) {
 
 		std::vector<Vertex*>* vertexes = new std::vector<Vertex*>();
 		vertexes->reserve(iRows * iColumns);
 
-		uint buffer = 0;
+		uint_t buffer = 0;
 
-		uint currentRow = 0;
-		uint currentColumn = 0;
+		uint_t currentRow = 0;
+		uint_t currentColumn = 0;
 	
 		while (iParser >> buffer) {
 			vertexes->push_back(new Vertex(buffer));

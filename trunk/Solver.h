@@ -12,20 +12,20 @@
 
 #include <limits>
 #include <cstddef>
-#include <set>
+#include <unordered_set>
 #include "Vertex.h"
 #include "Graph.h"
 
 typedef std::forward_list<Vertex*> vertexList;
 typedef std::forward_list<Vertex*>::iterator vertexListIterator;
-typedef std::set<Vertex*> vertexSet;
-typedef std::set<Vertex*>::iterator vertexSetIterator;
+typedef std::unordered_set<Vertex*> vertexSet;
+typedef std::unordered_set<Vertex*>::iterator vertexSetIterator;
 
 namespace Solver {
 	void solve(Graph &iGraph);
 	void updatePlateauCapacity(Vertex* iVertex);
-	void walkNeighboursAndAddToPlateau(Vertex* iVertex, vertexSet* ioPlateau);
-	void walkPlateauAndGetWalls(vertexSet* iPlateau, vertexSet* ioWall);
+	void getPlateau(Vertex* iVertex, vertexSet* oPlateau);
+	void getWall(vertexSet* iPlateau, vertexSet* oWall);
 	Vertex* getShortestWall(vertexSet* iWall);
 	void updateCapacities(vertexSet* iPlateau, Vertex* shortestWall);
 	bool equalHeightAndCapacity(Vertex* v1, Vertex* v2);

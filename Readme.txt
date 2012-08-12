@@ -40,33 +40,40 @@ element(0,0)	...		element(0,columns)
 element(rows,0)	...		element(rows,columns)
 
 ===============================================================================
-Vertex data structure description:
-
-File is parsed into a vector of vertexes, the attributes of each are:
-* uint_t height;	parsed from input file
-* uint_t capacity;	initialized to 0
-* bool stable;		flag initialized to false, becomes true when the capacity
-					value of Vertex is the final one
-* bool isSink;		I modeled the outside of the container as a special node,
-					with 0 capacity and	0 height.
-					All border vertexes in the container are connected to it.
-					I will refer to it as the "sink". This flag is used to
-					avoid treating the sink as a normal cell when finding the
-					border of a cluster later in the algorithm.
-* std::forward_list<Vertex*> neighbours;	pointers to neighbours according to
-											adjacency mode chosen
-Having typedef-ed uint_t as unsigned int, I can treat at most uint_t_MAX high cells.
-
-===============================================================================
 Graph data structure description:
 
-Graph is a vector of Vertexes.
-I keep track of rows and columns to implicitly determine each vertex neighbour.
-I can treat at most containers with uint_t_MAX rows and columns.
-After object creation buildAdjacencyList() has to be called, to explicit
-neighbouring informations and create on each Vertex the lists of pointers to
-neighbour vertexes.
+Graph is basically a std::vector<Vertex*> (see below).
+I stored rows and columns to implicitly determine the geometry of the matrix.
+Having chosen an std::vector I have limited `[]` and `.at()` operator access
+to `unsigned int`, so I chose the type for rows and columns accordingly.
+For the homework 4,294,967,296 elements should be enough, storing more would
+require a refactoring of the underlaying data structure.
+After object creation buildAdjacencyList() create on each Vertex the lists of
+pointers to neighbour vertexes according to the selected adjacency mode.
 Graph additionally contains some methods to display its status to std::cout.
+
+===============================================================================
+Vertex data structure description:
+
+* capacity_type height;		parsed from input file
+
+* capacity_type capacity;	initialized to 0
+
+* bool stable;		flag initialized to false, becomes true during processing
+					when the capacity of Vertex is the final one
+
+* std::forward_list<Vertex*> neighbours;	pointers to neighbours according to
+											adjacency mode chosen
+
+For cell heights and capacities I used:
+`typedef unsigned long long capacity_type;`
+which should allow for quite high containers, at least until I finish BigInt
+homework. Depending on the input this typedef could easily be changed to save
+some space.
+
+I modeled the outside of the container as a special node, with 0 capacity and
+0 height. All border vertexes in the container are connected to it.
+I will refer to it as the `sink`.
 
 ===============================================================================
 Problem resolution overview:
@@ -84,11 +91,11 @@ Container heights:
 9 8 9 7 8 2 5
 
 Preprocessing phase:
-After parsing the only node for which I have stable status is the sink. I
+After parsing, the only node for which I have stable status is the sink. I
 iterate from it, climbing up the borders of the container and moving through
 the higher vertexes I find. For each of these vertexes I can state they have
 0 capacity and stable status as their content directly goes into the sink.
-This way I easily restricted search space for the second part of the algorithm.
+This way I easily restrict search space for the second part of the algorithm.
 
 After preprocessing:
 0 0 0 0 0 0 0
@@ -111,7 +118,7 @@ Processing phase:
   its capacity can further increase).
 
 I implemented the whole algorithm without recursion to avoid being
-limited by stack size for huge amounts of node.
+limited by the stack size for huge amounts of node.
 
 Container capacities:
 0 0 0 0 0 0 0

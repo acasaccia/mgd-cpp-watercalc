@@ -18,7 +18,7 @@
 namespace Parser {
 	Graph* parse(const std::string &iFilename);
 	void load(const std::string &iFilename, std::ifstream &oParser);
-	void parseHeader(std::ifstream &iParser, uint &oRows, uint &oColumns);
-	Graph* parseData(std::ifstream &iParser, const uint iRows, const uint iColumns);
+	void parseHeader(std::ifstream &iParser, uint_t &oRows, uint_t &oColumns);
+	Graph* parseData(std::ifstream &iParser, const uint_t iRows, const uint_t iColumns);
 	void exitWrongInputFile();
 };

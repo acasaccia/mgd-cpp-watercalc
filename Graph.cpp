@@ -13,7 +13,7 @@
 #include "Graph.h"
 #include <iostream>
 
-Graph::Graph(uint iRows, uint iColumns, std::vector<Vertex*> iVertexes) {
+Graph::Graph(uint_t iRows, uint_t iColumns, std::vector<Vertex*> iVertexes) {
 	mRows = iRows;
 	mColumns = iColumns;
 	mVertexes = iVertexes;
@@ -21,10 +21,10 @@ Graph::Graph(uint iRows, uint iColumns, std::vector<Vertex*> iVertexes) {
 }
 
 void Graph::buildAdjacencyLists(AdjacencyMode iAdjacencyMode) {
-	std::forward_list<uint>* neighboursIndexes;
-	for (uint c=0; c<=mVertexes.size(); ++c) {
+	std::forward_list<uint_t>* neighboursIndexes;
+	for (uint_t c=0; c<=mVertexes.size(); ++c) {
 		neighboursIndexes = getNeighboursIndexes(c, iAdjacencyMode);
-		for (std::forward_list<uint>::iterator it = neighboursIndexes->begin(); it != neighboursIndexes->end(); ++it) {
+		for (std::forward_list<uint_t>::iterator it = neighboursIndexes->begin(); it != neighboursIndexes->end(); ++it) {
 			mVertexes[c]->neighbours.push_front(mVertexes[*it]);
 		}
 		delete neighboursIndexes;
@@ -33,13 +33,13 @@ void Graph::buildAdjacencyLists(AdjacencyMode iAdjacencyMode) {
 	display(HEIGHTS);
 }
 
-std::forward_list<uint>* Graph::getNeighboursIndexes(uint iIndex, AdjacencyMode iAdjacencyMode) {
-	std::forward_list<uint>* neighbours = new std::forward_list<uint>();
+std::forward_list<uint_t>* Graph::getNeighboursIndexes(uint_t iIndex, AdjacencyMode iAdjacencyMode) {
+	std::forward_list<uint_t>* neighbours = new std::forward_list<uint_t>();
 
 	if (iIndex==mRows * mColumns) {
 		
 		// We are querying for sink's neighbours
-		for (uint r=0; r<mRows*mColumns; ++r) {
+		for (uint_t r=0; r<mRows*mColumns; ++r) {
 			if (r<mColumns || r>mColumns*(mRows-1) || r%mColumns == 0 || r%mColumns == mColumns-1)
 				neighbours->push_front(r);
 		}
@@ -48,8 +48,8 @@ std::forward_list<uint>* Graph::getNeighboursIndexes(uint iIndex, AdjacencyMode 
 
 		// We are querying for another cell's neighbours
 		double tmp = iIndex / mColumns;
-		uint r = static_cast<uint>(std::ceil(tmp));
-		uint c = iIndex % mColumns;
+		uint_t r = static_cast<uint_t>(std::ceil(tmp));
+		uint_t c = iIndex % mColumns;
 
 		if (r>0)			neighbours->push_front(c + (r - 1) * mColumns);
 		if (r<mRows - 1)	neighbours->push_front(c + (r + 1) * mColumns);
@@ -63,15 +63,15 @@ std::forward_list<uint>* Graph::getNeighboursIndexes(uint iIndex, AdjacencyMode 
 			if (c<mColumns - 1 && r>0 )			neighbours->push_front(c + 1 + (r - 1) * mColumns);
 		}
 			
-		if (r==0 || r==mColumns - 1 || c==0 || c==mRows - 1) neighbours->push_front(mColumns * mRows);
+		if (r==0 || r==mRows - 1 || c==0 || c== mColumns - 1) neighbours->push_front(mColumns * mRows);
 	}
 
 	return neighbours;
 }
 
 void Graph::display(DisplayMode iDisplayMode) {
-	for (uint r=0; r<mRows; ++r) {
-		for (uint c=0; c<mColumns; ++c) {
+	for (uint_t r=0; r<mRows; ++r) {
+		for (uint_t c=0; c<mColumns; ++c) {
 			switch (iDisplayMode) {
 			case CAPACITIES:
 				if ( !mVertexes.at(c+r*mColumns)->stable )

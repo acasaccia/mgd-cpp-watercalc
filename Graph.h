@@ -29,12 +29,12 @@ enum DisplayMode {
 
 class Graph {
 public:
-	uint mRows;
-	uint mColumns;
+	uint_t mRows;
+	uint_t mColumns;
 	std::vector<Vertex*> mVertexes;
-	Graph(uint iRows, uint iColumns, std::vector<Vertex*> iVertexes);
+	Graph(uint_t iRows, uint_t iColumns, std::vector<Vertex*> iVertexes);
 	void buildAdjacencyLists(AdjacencyMode iAdjacencyMode);
 	void display(DisplayMode iDisplayMode);
 private:
-	std::forward_list<uint>* getNeighboursIndexes(uint iIndex, AdjacencyMode iAdjacencyMode);
+	std::forward_list<uint_t>* getNeighboursIndexes(uint_t iIndex, AdjacencyMode iAdjacencyMode);
 };

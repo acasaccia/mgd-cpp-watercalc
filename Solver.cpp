@@ -79,41 +79,51 @@ namespace Solver {
 	}
 
 	void updatePlateauCapacity(Vertex* iVertex) {
+		
 		vertexSet* plateau = new vertexSet();
-		walkNeighboursAndAddToPlateau(iVertex, plateau);
-		vertexSet* walls = new vertexSet();
-		walkPlateauAndGetWalls(plateau, walls);
+		getPlateau(iVertex, plateau);
+		
+		vertexSet* wall = new vertexSet();
+		getWall(plateau, wall);
+
 		Vertex* shortestWall = NULL;
-		shortestWall = getShortestWall(walls);
+		shortestWall = getShortestWall(wall);
+
 		updateCapacities(plateau, shortestWall);
+
 		delete plateau;
-		delete walls;
+		delete wall;
 	}
 
-	// Recursively find the cluster of neighbours with the same height and capacity as
-	// current vertex if they exists (I refer to these vertexes as "plateau").
-	// @todo: can I avoid recursion?
-	void walkNeighboursAndAddToPlateau(Vertex* iVertex, vertexSet* ioPlateau) {
-		ioPlateau->insert(iVertex);
-		for ( vertexListIterator neighbourIt = iVertex->neighbours.begin(); neighbourIt != iVertex->neighbours.end(); ++neighbourIt) {
-			if (ioPlateau->find(*neighbourIt) == ioPlateau->end()) {
-				if (equalHeightAndCapacity(iVertex, *neighbourIt)) {
-					walkNeighboursAndAddToPlateau(*neighbourIt, ioPlateau);
+	// Find the cluster of neighbours with the same height and capacity as iVertex
+	void getPlateau(Vertex* iVertex, vertexSet* oPlateau) {
+		vertexSet* alreadyVisited = new vertexSet();
+		vertexSet* toVisit = new vertexSet();
+		toVisit->insert(iVertex);
+		while (!toVisit->empty()) {
+			Vertex* current = *(toVisit->begin());
+			toVisit->erase(toVisit->begin());
+			alreadyVisited->insert(current);
+			if (equalHeightAndCapacity(current, iVertex) && !current->stable) {
+				oPlateau->insert(current);
+				for ( vertexListIterator neighbourIt = current->neighbours.begin(); neighbourIt != current->neighbours.end(); ++neighbourIt) {
+					if (alreadyVisited->find(*neighbourIt) == alreadyVisited->end()) {
+						toVisit->insert(*neighbourIt);
+					}
 				}
 			}
 		}
+		delete alreadyVisited;
+		delete toVisit;
 	}
 
-	// Recursively find all border neighbours for the plateau (I refer to the border
-	// neighbours as "wall").
-	// @todo: can I avoid recursion?
-	void walkPlateauAndGetWalls(vertexSet* iPlateau, vertexSet* ioWall) {
+	// Find the border vertexes for this plateau
+	void getWall(vertexSet* iPlateau, vertexSet* oWall) {
 		for ( vertexSetIterator plateauIt = iPlateau->begin(); plateauIt != iPlateau->end(); ++plateauIt) {
 			for ( vertexListIterator neighbourIt = (*plateauIt)->neighbours.begin(); neighbourIt != (*plateauIt)->neighbours.end(); ++neighbourIt) {
-				if (ioWall->find(*neighbourIt) == ioWall->end()) {
-					// We have to avoid treating the sink as a normal cell when finding the wall of the cluster
-					if (LessHeightAndCapacity()(*plateauIt, *neighbourIt) || ((*neighbourIt)->stable && !(*neighbourIt)->sink )) {
-						ioWall->insert(*neighbourIt);
+				if (oWall->find(*neighbourIt) == oWall->end()) {
+					if (LessHeightAndCapacity()(*plateauIt, *neighbourIt) || (*neighbourIt)->stable) {
+						oWall->insert(*neighbourIt);
 					}
 				}
 			}
@@ -128,12 +138,6 @@ namespace Solver {
 			else if (LessHeightAndCapacity()(*wallIt, shortestWall)) {
 				shortestWall = *wallIt;
 			}
-			// When there are more than one shortestWall candidates it would be better to pick the already stable one
-			// however this slows down the algorithm, we are adding an if each iteration to speed up an unusual case
-			//else if (EqualsHeightAndCapacity()(*wallIt, shortestWall)) {
-			//	if (!shortestWall->stable && (*wallIt)->stable)
-			//		shortestWall = *wallIt;
-			//}
 		}
 		return shortestWall;
 	}
@@ -141,12 +145,16 @@ namespace Solver {
 	// The shortest vertex of the wall determines if selected plateau's capacity has to
 	// be incremented.
 	void updateCapacities(vertexSet* iPlateau, Vertex* shortestWall) {
+		vertexSetIterator plateauIt = iPlateau->begin();
+		uint_t wallHeightAndCapacity = shortestWall->capacity + shortestWall->height;
+		uint_t plateauHeightAndCapacity = (*plateauIt)->height + (*plateauIt)->capacity;
+		uint_t capacityIncrement = wallHeightAndCapacity > plateauHeightAndCapacity ? wallHeightAndCapacity - plateauHeightAndCapacity : 0;
 		for ( vertexSetIterator plateauIt = iPlateau->begin(); plateauIt != iPlateau->end(); ++plateauIt) {
-			if (shortestWall->capacity + shortestWall->height >= (*plateauIt)->height + (*plateauIt)->capacity) {
-				(*plateauIt)->capacity += shortestWall->capacity + shortestWall->height - ( (*plateauIt)->height + (*plateauIt)->capacity );
+			if (capacityIncrement) {
+				(*plateauIt)->capacity += capacityIncrement;
 			}
-			// If the shortest wall is stable, I can mark all plateau as stable (there is no way
-			// its capacity can further increase).
+			// If the shortest wall is stable, I can mark all plateau as stable
+			// (there is no way its capacity can further increase).
 			(*plateauIt)->stable = shortestWall->stable;
 		}
 	}

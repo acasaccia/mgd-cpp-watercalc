@@ -45,9 +45,9 @@ Graph data structure description:
 Graph is basically a std::vector<Vertex*> (see below).
 I stored rows and columns to implicitly determine the geometry of the matrix.
 Having chosen an std::vector I have limited `[]` and `.at()` operator access
-to `unsigned int`, so I chose the type for rows and columns accordingly.
+to `std::size_t`, so I used it for rows and columns accordingly.
 For the homework 4,294,967,296 elements should be enough, storing more would
-require a refactoring of the underlaying data structure.
+require a refactoring of the underlying data structure.
 After object creation buildAdjacencyList() create on each Vertex the lists of
 pointers to neighbour vertexes according to the selected adjacency mode.
 Graph additionally contains some methods to display its status to std::cout.

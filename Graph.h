@@ -29,12 +29,34 @@ enum DisplayMode {
 
 class Graph {
 public:
-	uint mRows;
-	uint mColumns;
+	std::size_t mRows;
+	std::size_t mColumns;
 	std::vector<Vertex*> mVertexes;
-	Graph(uint iRows, uint iColumns, std::vector<Vertex*> iVertexes);
+	Graph(std::size_t iRows, std::size_t iColumns, std::vector<Vertex*> iVertexes);
+
+	/**
+	 * Builds list of pointer to neighbour vertexes on each vertex based on the implicit geometry
+	 * of the container.
+	 * \see Readme.txt for explanations on adjacency mode
+	 * \param AdjacencyMode iAdjacencyMode
+	 */
 	void buildAdjacencyLists(AdjacencyMode iAdjacencyMode);
+
+	/**
+	 * Displays graph internal status echoing to std::cout.
+	 * \param DisplayMode iDisplayMode which vertex attribute to display
+	 */
 	void display(DisplayMode iDisplayMode);
+
 private:
-	std::forward_list<uint>* getNeighboursIndexes(uint iIndex, AdjacencyMode iAdjacencyMode);
+
+	/**
+	 * For vertex identified by input index finds a list of neighbours
+	 * (referring them with their index as well).
+	 * These indexes will be translated to Vertex* later.
+	 * \param std::size_t iIndex index of the vertex to process for neighbours
+	 * \param AdjacencyMode iAdjacencyMode whether to get 4 or 8 neighbours
+	 * \return std::forward_list<std::size_t>* list of neighbours indexes
+	 */
+	std::forward_list<std::size_t>* getNeighboursIndexes(std::size_t iIndex, AdjacencyMode iAdjacencyMode);
 };

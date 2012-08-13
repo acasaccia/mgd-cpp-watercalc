@@ -19,8 +19,23 @@ namespace Arguments {
 	static const char* ADJACENCY4 = "-adjacency=4";
 	static const char* ADJACENCY8 = "-adjacency=8";
 
+	/**
+	 * Checks number and validity of arguments
+	 */
 	void check(std::vector<std::string> &ioArgs);
+
+	/**
+	 * Displays usage help
+	 */
 	void displayHelp();
+
+	/**
+	 * Displays usage help and exits from the application with the proper error code
+	 */
 	void exitWrongArgs();
+
+	/**
+	 * Displays usage help and exits from the application
+	 */
 	void exitDisplayHelp();
 };

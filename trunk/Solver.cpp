@@ -14,6 +14,7 @@
 
 namespace Solver {
 
+	// Class used to sort an stl container of Vertex* with stable vertexes first
 	class StableFirst {
 		public:
 		bool operator()(Vertex* v1, Vertex* v2)
@@ -22,6 +23,7 @@ namespace Solver {
 		}
 	};
 
+	// Class used to sort an stl container of Vertex* with lowest capacity + height first
 	class LessHeightAndCapacity {
 		public:
 		bool operator()(Vertex* v1, Vertex* v2)
@@ -30,6 +32,7 @@ namespace Solver {
 		}
 	};
 
+	// Checks if vertexes have same height + capacity.
 	bool equalHeightAndCapacity (Vertex* v1, Vertex* v2) {
 		return v1->height + v1->capacity == v2->height + v2->capacity;
 	}
@@ -61,6 +64,16 @@ namespace Solver {
 		std::cout << std::endl << "After preprocessing:" << std::endl;
 		iGraph.display(CAPACITIES);
 
+		// Processing phase:
+		// 1 Sort the unstable vertexes by height plus capacity
+		// 2 Select the lowest as current
+		// 3 Find the cluster of neighbours with the same height and capacity as current
+		//   if they exists (I refer to these vertexes as "plateau").
+		// 4 Find the wall of the plateau (the border vertexes)
+		// 5 Shortest vertex of the wall determines if selected plateau's capacity has to
+		//   be incremented.
+		// 6 If shortest wall is stable, mark all plateau as stable (there is no way
+		//   its capacity can further increase).
 		while (!vertexesQueue->empty()) {
 			vertexesQueue->sort(LessHeightAndCapacity());
 			Vertex* current = vertexesQueue->front();
@@ -78,6 +91,9 @@ namespace Solver {
 
 	}
 
+	// Find the plateau of input vertex (the lowest height + capacity is chosen at each step),
+	// update its capacity and marks stable if needed.
+	// I call "plateau" a cluster of vertexes who have same height and capacity.
 	void updatePlateauCapacity(Vertex* iVertex) {
 		
 		vertexSet* plateau = new vertexSet();
@@ -117,7 +133,7 @@ namespace Solver {
 		delete toVisit;
 	}
 
-	// Find the border vertexes for this plateau
+	// Finds the border (or wall) of the plateau passed in.
 	void getWall(vertexSet* iPlateau, vertexSet* oWall) {
 		for ( vertexSetIterator plateauIt = iPlateau->begin(); plateauIt != iPlateau->end(); ++plateauIt) {
 			for ( vertexListIterator neighbourIt = (*plateauIt)->neighbours.begin(); neighbourIt != (*plateauIt)->neighbours.end(); ++neighbourIt) {
@@ -130,6 +146,7 @@ namespace Solver {
 		}
 	}
 
+	// Finds the lowest (considering height and capacity) vertex in a set
 	Vertex* getShortestWall(vertexSet* iWall) {
 		Vertex* shortestWall = NULL;
 		for ( vertexSetIterator wallIt = iWall->begin(); wallIt != iWall->end(); ++wallIt) {
@@ -142,8 +159,8 @@ namespace Solver {
 		return shortestWall;
 	}
 
-	// The shortest vertex of the wall determines if selected plateau's capacity has to
-	// be incremented.
+	// Uses shortest wall to determine id we need to update the capacities of input plateau.
+	// If shortest wall is stable, marks whole plateau as stable
 	void updateCapacities(vertexSet* iPlateau, Vertex* shortestWall) {
 		vertexSetIterator plateauIt = iPlateau->begin();
 		capacity_type wallHeightAndCapacity = shortestWall->capacity + shortestWall->height;

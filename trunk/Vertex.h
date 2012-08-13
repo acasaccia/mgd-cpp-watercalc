@@ -13,18 +13,15 @@
 
 #pragma once
 
-#include <cstddef>
 #include <forward_list>
 
 typedef unsigned long long capacity_type;
-typedef unsigned int uint;
 
 struct Vertex {
-	capacity_type height;		// parsed from input file
-	capacity_type capacity;	// initialized to 0
-	bool stable;		// flag initialized to false, becomes true when the capacity value of Vertex is the final one
-	std::forward_list<Vertex*> neighbours; // pointers to neighbours according to adjacency mode chosen
-
+	capacity_type height;
+	capacity_type capacity;
+	bool stable; // marks whether this vertex capacity is temporary or final
+	std::forward_list<Vertex*> neighbours;
 	Vertex() :
 		height( 0 ),
 		capacity( 0 ),

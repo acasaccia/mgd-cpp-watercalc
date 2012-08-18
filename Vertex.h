@@ -15,11 +15,11 @@
 
 #include <forward_list>
 
-typedef unsigned long long capacity_type;
+typedef unsigned long long capacity_t;
 
 struct Vertex {
-	capacity_type height;
-	capacity_type capacity;
+	capacity_t height;
+	capacity_t capacity;
 	bool stable; // marks whether this vertex capacity is temporary or final
 	std::forward_list<Vertex*> neighbours;
 	Vertex() :
@@ -28,7 +28,7 @@ struct Vertex {
 		stable( true )
 	{ neighbours = std::forward_list<Vertex*>(); }
 
-	Vertex(capacity_type iHeight) :
+	Vertex(capacity_t iHeight) :
 		height( iHeight ),
 		capacity( 0 ),
 		stable( false )

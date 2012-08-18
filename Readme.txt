@@ -55,9 +55,9 @@ Graph additionally contains some methods to display its status to std::cout.
 ===============================================================================
 Vertex data structure description:
 
-* capacity_type height;		parsed from input file
+* capacity_t height;		parsed from input file
 
-* capacity_type capacity;	initialized to 0
+* capacity_t capacity;	initialized to 0
 
 * bool stable;		flag initialized to false, becomes true during processing
 					when the capacity of Vertex is the final one
@@ -66,7 +66,7 @@ Vertex data structure description:
 											adjacency mode chosen
 
 For cell heights and capacities I used:
-`typedef unsigned long long capacity_type;`
+`typedef unsigned long long capacity_t;`
 which should allow for quite high containers, at least until I finish BigInt
 homework. Depending on the input this typedef could easily be changed to save
 some space.

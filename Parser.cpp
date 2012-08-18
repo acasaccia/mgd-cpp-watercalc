@@ -63,7 +63,7 @@ namespace Parser {
 		std::vector<Vertex*>* vertexes = new std::vector<Vertex*>();
 		vertexes->reserve(iRows * iColumns);
 
-		capacity_type buffer = 0;
+		capacity_t buffer = 0;
 
 		std::size_t currentRow = 0;
 		std::size_t currentColumn = 0;

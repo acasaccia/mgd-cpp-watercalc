@@ -163,9 +163,9 @@ namespace Solver {
 	// If shortest wall is stable, marks whole plateau as stable
 	void updateCapacities(vertexSet* iPlateau, Vertex* shortestWall) {
 		vertexSetIterator plateauIt = iPlateau->begin();
-		capacity_type wallHeightAndCapacity = shortestWall->capacity + shortestWall->height;
-		capacity_type plateauHeightAndCapacity = (*plateauIt)->height + (*plateauIt)->capacity;
-		capacity_type capacityIncrement = wallHeightAndCapacity > plateauHeightAndCapacity ? wallHeightAndCapacity - plateauHeightAndCapacity : 0;
+		capacity_t wallHeightAndCapacity = shortestWall->capacity + shortestWall->height;
+		capacity_t plateauHeightAndCapacity = (*plateauIt)->height + (*plateauIt)->capacity;
+		capacity_t capacityIncrement = wallHeightAndCapacity > plateauHeightAndCapacity ? wallHeightAndCapacity - plateauHeightAndCapacity : 0;
 		for ( vertexSetIterator plateauIt = iPlateau->begin(); plateauIt != iPlateau->end(); ++plateauIt) {
 			if (capacityIncrement) {
 				(*plateauIt)->capacity += capacityIncrement;

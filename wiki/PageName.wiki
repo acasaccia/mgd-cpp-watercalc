@@ -1,4 +1,4 @@
-#summary Usage and input design
+#summary documentation
 
 = Usage and input design =
 
@@ -15,7 +15,7 @@ With 4 way adjacency each cell communicates with its top, right, bottom and left
    | X |
 }}}
 
-while in 8 way adjacency diagonals are included too:
+while in 8 way adjacency diagonals are communicating too:
 
 {{{
  X | X | X 

@@ -1,4 +1,4 @@
-#summary documentation
+#summary Documentation
 
 = Usage and input design =
 

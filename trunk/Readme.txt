@@ -12,7 +12,7 @@ Usage and input design:
 usage: C:\>WaterCalc.exe [inputfile] [-adjacency=4|8]
 -adjacency parameter is optional default is 4-way adjacency.
 
-With 4 way adjacency each cell communicates with neighbours like this:
+With 4 way adjacency each cell communicates with its top, right, bottom and left neighbours:
  
    | X |   
 -----------
@@ -20,7 +20,7 @@ With 4 way adjacency each cell communicates with neighbours like this:
 -----------
    | X |
 
-while in 8 way adjacency:
+while in 8 way adjacency diagonals are communicating too:
 
  X | X | X 
 -----------
